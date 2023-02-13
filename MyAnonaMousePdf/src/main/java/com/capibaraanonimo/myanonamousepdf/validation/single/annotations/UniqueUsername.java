@@ -10,9 +10,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UniqueUsernameValidator.class)
 @Documented
-public @interface UniqueNombreUsuario {
+public @interface UniqueUsername {
 
-    String message() default "El nombre de usuario ya existe";
+    String message() default "The username is already taken or is blank";
 
     Class<?>[] groups() default {};
 

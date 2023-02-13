@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -52,23 +54,19 @@ public class UserController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<UserResponse> createUserWithUserRole(@RequestBody CreateUserRequest createUserRequest) {
-        User user = userService.createUserWithUserRole(createUserRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(user));
+    public ResponseEntity<UserResponse> createUserWithUserRole(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(userService.createUserWithUserRole(createUserRequest)));
     }
 
     // Más adelante podemos manejar la seguridad de acceso a esta petición
 
     @PostMapping("/auth/register/admin")
-    public ResponseEntity<UserResponse> createUserWithAdminRole(@RequestBody CreateUserRequest createUserRequest) {
-        User user = userService.createUserWithAdminRole(createUserRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(user));
+    public ResponseEntity<UserResponse> createUserWithAdminRole(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(userService.createUserWithAdminRole(createUserRequest)));
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<JwtUserResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtUserResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
 
         // Realizamos la autenticación
 
