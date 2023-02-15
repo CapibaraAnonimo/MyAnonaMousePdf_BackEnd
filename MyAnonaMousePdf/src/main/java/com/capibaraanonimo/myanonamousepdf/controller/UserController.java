@@ -55,6 +55,7 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserResponse> createUserWithUserRole(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        System.out.println(createUserRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromUser(userService.createUserWithUserRole(createUserRequest)));
     }
 
@@ -67,6 +68,7 @@ public class UserController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<JwtUserResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+        System.out.println("Se inicia sesión");
 
         // Realizamos la autenticación
 
@@ -90,7 +92,7 @@ public class UserController {
         refreshTokenService.deleteByUser(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(JwtUserResponse.of(user, token, refreshToken.getToken()));
 
 
