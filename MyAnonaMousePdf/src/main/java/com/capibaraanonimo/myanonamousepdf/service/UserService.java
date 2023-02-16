@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.existsUserByEmail(email);
     }
 
+    public boolean existsById(UUID id) {
+        return userRepository.existsById(id);
+    }
+
     public User findById(UUID userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent())

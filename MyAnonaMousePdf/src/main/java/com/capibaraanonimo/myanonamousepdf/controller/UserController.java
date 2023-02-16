@@ -94,7 +94,5 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(JwtUserResponse.of(user, token, refreshToken.getToken()));
-
-
     }
 }

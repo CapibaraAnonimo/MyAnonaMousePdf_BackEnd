@@ -1,13 +1,13 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
+import com.capibaraanonimo.myanonamousepdf.dto.CreateBook;
 import com.capibaraanonimo.myanonamousepdf.model.Book;
 import com.capibaraanonimo.myanonamousepdf.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController()
@@ -19,5 +19,10 @@ public class BookController {
     @GetMapping() //TODO añadir búsqueda
     public List<Book> getAllBooks() {
         return bookService.findAll();
+    }
+
+    @PostMapping() //TODO arreglar unsupported media type
+    public Book postBook(@RequestPart("file") MultipartFile file, @RequestPart("book") @Valid CreateBook book) {
+        return bookService.save(book, file);
     }
 }
