@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueEmail {
 
-    String message() default "El email ya está en uso";
+    String message() default "The email is already taken or is blank";
 
     Class<?>[] groups() default {};
 

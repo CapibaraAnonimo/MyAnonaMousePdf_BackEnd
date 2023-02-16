@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldsValueMatch {
-    String message() default "Los valores de los campos no coinciden";
+    String message() default "The field values don't match";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

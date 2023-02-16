@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "category")
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +35,6 @@ public class Category {
     @Column(unique = true, updatable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private List<Book> categorizedBooks;
 }
