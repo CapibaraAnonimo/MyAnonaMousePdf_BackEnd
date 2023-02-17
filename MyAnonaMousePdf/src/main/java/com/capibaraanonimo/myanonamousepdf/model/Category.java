@@ -6,6 +6,7 @@ import org.hibernate.annotations.NaturalId;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class Category {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -36,5 +38,6 @@ public class Category {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-    private List<Book> categorizedBooks;
+    @Builder.Default
+    private List<Book> categorizedBooks = new ArrayList<Book>();
 }

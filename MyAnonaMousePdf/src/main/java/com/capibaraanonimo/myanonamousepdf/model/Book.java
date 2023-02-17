@@ -49,5 +49,9 @@ public class Book {
     @Builder.Default()
     private boolean vip = false;
 
-    private String title, author, description;
+    private String book, title, author, description;
+
+    public void incrementDownloads() {
+        amountDownloads += 1;
+    }
 }
