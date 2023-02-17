@@ -2,6 +2,7 @@ package com.capibaraanonimo.myanonamousepdf.service;
 
 import com.capibaraanonimo.myanonamousepdf.dto.CreateBook;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.BookNameNotFoundException;
+import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ContentTypeNotValidException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ListEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.model.Book;
 import com.capibaraanonimo.myanonamousepdf.repository.BookRepository;
@@ -33,7 +34,9 @@ public class BookService {
         return books;
     }
 
-    public Book save(CreateBook book, MultipartFile file) {
+    public Book save(CreateBook book, MultipartFile file) { //FIXME no tengo claro ese posible null pointer
+        if (!(file.getContentType().equals("application/pdf") || file.getContentType().equals("application/epub+zip")))
+            throw new ContentTypeNotValidException(file.getContentType());
         String filename = storageService.store(file);
 
         return bookRepository.save(

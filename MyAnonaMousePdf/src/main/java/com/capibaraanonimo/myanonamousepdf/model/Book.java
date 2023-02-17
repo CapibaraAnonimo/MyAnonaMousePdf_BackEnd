@@ -38,12 +38,14 @@ public class Book {
     private LocalDateTime uploadDate = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_BOOK_USER"))
     private User uploader;
 
     @Builder.Default()
     private long amountDownloads = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "FK_BOOK_CATEGORY"))
     private Category category;
 
     @Builder.Default()

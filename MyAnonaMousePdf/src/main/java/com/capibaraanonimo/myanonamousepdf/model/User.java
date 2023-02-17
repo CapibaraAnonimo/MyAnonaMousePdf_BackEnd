@@ -73,7 +73,6 @@ public class User implements UserDetails {
     private List<Book> uploadedBooks;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable()
     private List<Book> savedBooks;
 
     @ElementCollection(fetch = FetchType.EAGER)
