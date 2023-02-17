@@ -50,4 +50,8 @@ public class Book {
     private boolean vip = false;
 
     private String book, title, author, description;
+
+    public void incrementDownloads() {
+        amountDownloads += 1;
+    }
 }
