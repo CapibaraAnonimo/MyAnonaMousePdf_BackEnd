@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Builder
-public class User implements UserDetails {
+public class User implements UserDetails { //TODO añadir un soft delete con acceso a datos "eliminados" o usar el inabilitado
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

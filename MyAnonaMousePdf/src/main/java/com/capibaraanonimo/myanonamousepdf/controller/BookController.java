@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,9 @@ public class BookController {
     private final BookService bookService;
     private final StorageService storageService;
 
-    @GetMapping() //TODO añadir orden y lo mismo debería poner errores para por si ponen un igual
+    @GetMapping() //TODO Hacer la paginación bien
     public Page<BookResponse> getAllBooks(@RequestParam(value = "search", defaultValue = "") String search,
-                                          @PageableDefault(size = 20, page = 0) Pageable pageable) {
+                                          @PageableDefault(size = 20, page = 0, sort = {"uploadDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         List<SearchCriteria> params = SearchCriteriaExtractor.extractSearchCriteriaList(search);
 
         return new PageImpl<>(bookService.search(params, pageable).stream().map(BookResponse::of).toList());
