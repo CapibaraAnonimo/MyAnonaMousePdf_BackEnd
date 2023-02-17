@@ -54,9 +54,8 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    public Page<Book> search(List<SearchCriteria> params, Pageable pageable) {
-        BookSpecificationBuilder personSpecificationBuilder =
-                new BookSpecificationBuilder(params);
+    public Page<Book> search(List<SearchCriteria> params, Pageable pageable) { //TODO poner el search para que busque sin importar las mayusculas
+        BookSpecificationBuilder personSpecificationBuilder = new BookSpecificationBuilder(params);
         Specification<Book> spec = personSpecificationBuilder.build();
         Page<Book> books = bookRepository.findAll(spec, pageable);
 
