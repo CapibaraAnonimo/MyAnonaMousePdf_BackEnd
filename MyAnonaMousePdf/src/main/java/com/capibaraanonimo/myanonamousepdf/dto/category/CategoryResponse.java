@@ -1,5 +1,6 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.category;
 
+import com.capibaraanonimo.myanonamousepdf.dto.book.BookResponse;
 import com.capibaraanonimo.myanonamousepdf.model.Category;
 import lombok.*;
 

@@ -1,5 +1,6 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.book;
 
+import com.capibaraanonimo.myanonamousepdf.dto.user.UserResponse;
 import com.capibaraanonimo.myanonamousepdf.model.Book;
 import lombok.*;
 
@@ -11,28 +12,25 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookResponse {
-    private UUID id;
+public class BookCreatedResponse {
+    public UUID id;
 
-    private LocalDateTime uploadDate;
+    protected LocalDateTime uploadDate;
 
-    private UserResponse uploader;
+    protected UserResponse uploader;
 
-    private long amountDownloads;
-
-    private String category;
+    protected String category;
 
     @Builder.Default()
-    private boolean vip = false;
+    protected boolean vip = false;
 
-    private String book, title, author, description;
+    protected String book, title, author, description;
 
-    public static BookResponse of(Book book) {
-        return BookResponse.builder()
+    public static BookCreatedResponse of(Book book) {
+        return BookCreatedResponse.builder()
                 .id(book.getId())
                 .uploadDate(book.getUploadDate())
                 .uploader(UserResponse.fromUser(book.getUploader()))
-                .amountDownloads(book.getAmountDownloads())
                 .category(book.getCategory().getName())
                 .vip(book.isVip())
                 .book(book.getBook())

@@ -1,6 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.service;
 
-import com.capibaraanonimo.myanonamousepdf.dto.CreateUserRequest;
+import com.capibaraanonimo.myanonamousepdf.dto.user.CreateUserRequest;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.SingleEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.model.Roles;
 import com.capibaraanonimo.myanonamousepdf.model.User;

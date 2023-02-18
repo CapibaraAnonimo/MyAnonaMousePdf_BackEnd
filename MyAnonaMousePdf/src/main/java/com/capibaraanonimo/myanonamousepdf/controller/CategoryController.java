@@ -1,6 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
-import com.capibaraanonimo.myanonamousepdf.dto.CategoryResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.category.CategoryResponse;
 import com.capibaraanonimo.myanonamousepdf.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
