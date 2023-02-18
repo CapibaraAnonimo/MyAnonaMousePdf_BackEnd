@@ -1,4 +1,4 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.user;
 
 import com.capibaraanonimo.myanonamousepdf.validation.multiple.annotations.FieldsValueMatch;
 import com.capibaraanonimo.myanonamousepdf.validation.single.annotations.UniqueEmail;

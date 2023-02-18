@@ -1,9 +1,11 @@
 package com.capibaraanonimo.myanonamousepdf.service;
 
-import com.capibaraanonimo.myanonamousepdf.dto.CreateBook;
+import com.capibaraanonimo.myanonamousepdf.dto.book.CreateBook;
+import com.capibaraanonimo.myanonamousepdf.dto.book.UpdateBook;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.BookNameNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ContentTypeNotValidException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ListEntityNotFoundException;
+import com.capibaraanonimo.myanonamousepdf.errors.exceptions.SingleEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.model.Book;
 import com.capibaraanonimo.myanonamousepdf.repository.BookRepository;
 import com.capibaraanonimo.myanonamousepdf.search.spec.BookSpecificationBuilder;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -72,5 +75,22 @@ public class BookService {
             this.save(book);
         } else
             throw new BookNameNotFoundException(name);
+    }
+
+    public void deleteById(UUID id) { //FIXME devuelve un 401 si no existe la entidad que buscas
+        bookRepository.deleteById(id);
+    }
+
+    public Book edit(String id, UpdateBook updateBook) {
+        Optional<Book> bookOpt = bookRepository.findById(UUID.fromString(id));
+        if (bookOpt.isEmpty())
+            throw new SingleEntityNotFoundException(UUID.fromString(id), Book.class);
+        Book book =  bookOpt.get();
+        book.setCategory(categoryService.findById(UUID.fromString(updateBook.getCategory())));
+        book.setVip(updateBook.isVip());
+        book.setTitle(updateBook.getTitle());
+        book.setAuthor(updateBook.getAuthor());
+        book.setDescription(updateBook.getDescription());
+        return bookRepository.save(book);
     }
 }

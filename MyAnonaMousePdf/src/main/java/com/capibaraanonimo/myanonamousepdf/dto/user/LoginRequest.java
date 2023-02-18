@@ -1,4 +1,4 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

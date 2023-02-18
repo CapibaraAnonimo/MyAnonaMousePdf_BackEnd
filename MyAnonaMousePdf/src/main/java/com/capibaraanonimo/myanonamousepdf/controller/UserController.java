@@ -1,9 +1,9 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
-import com.capibaraanonimo.myanonamousepdf.dto.CreateUserRequest;
-import com.capibaraanonimo.myanonamousepdf.dto.JwtUserResponse;
-import com.capibaraanonimo.myanonamousepdf.dto.LoginRequest;
-import com.capibaraanonimo.myanonamousepdf.dto.UserResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.user.CreateUserRequest;
+import com.capibaraanonimo.myanonamousepdf.dto.user.JwtUserResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.user.LoginRequest;
+import com.capibaraanonimo.myanonamousepdf.dto.user.UserResponse;
 import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.security.jwt.access.JwtProvider;
 import com.capibaraanonimo.myanonamousepdf.security.jwt.refresh.RefreshToken;

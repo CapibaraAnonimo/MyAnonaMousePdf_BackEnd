@@ -1,4 +1,4 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.user;
 
 import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;

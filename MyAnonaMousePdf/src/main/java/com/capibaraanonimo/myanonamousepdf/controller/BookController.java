@@ -1,7 +1,9 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
-import com.capibaraanonimo.myanonamousepdf.dto.BookResponse;
-import com.capibaraanonimo.myanonamousepdf.dto.CreateBook;
+import com.capibaraanonimo.myanonamousepdf.dto.book.BookCreatedResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.book.BookResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.book.CreateBook;
+import com.capibaraanonimo.myanonamousepdf.dto.book.UpdateBook;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteria;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteriaExtractor;
 import com.capibaraanonimo.myanonamousepdf.service.BookService;
@@ -10,7 +12,6 @@ import com.capibaraanonimo.myanonamousepdf.utils.MediaTypeUrlResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("/book")
@@ -29,12 +31,11 @@ public class BookController {
     private final BookService bookService;
     private final StorageService storageService;
 
-    @GetMapping() //TODO Hacer la paginación bien
+    @GetMapping() //TODO personalizar la Page que no se que meterle
     public Page<BookResponse> getAllBooks(@RequestParam(value = "search", defaultValue = "") String search,
                                           @PageableDefault(size = 20, page = 0, sort = {"uploadDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         List<SearchCriteria> params = SearchCriteriaExtractor.extractSearchCriteriaList(search);
-
-        return new PageImpl<>(bookService.search(params, pageable).stream().map(BookResponse::of).toList());
+        return bookService.search(params, pageable).map(BookResponse::of);
     }
 
     @GetMapping("/download/{filename:.+}")
@@ -49,7 +50,18 @@ public class BookController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public BookResponse postBook(@RequestPart("file") MultipartFile file, @RequestPart("book") @Valid CreateBook book) {
-        return BookResponse.of(bookService.save(book, file));
+    public BookCreatedResponse postBook(@RequestPart("file") MultipartFile file, @RequestPart("book") @Valid CreateBook book) {
+        return BookCreatedResponse.of(bookService.save(book, file));
+    }
+
+    @PutMapping("/{id}")
+    public BookResponse putBook(@PathVariable String id, @RequestBody @Valid UpdateBook updateBook) {
+        return BookResponse.of(bookService.edit(id, updateBook));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable String id) {
+        bookService.deleteById(UUID.fromString(id));
     }
 }

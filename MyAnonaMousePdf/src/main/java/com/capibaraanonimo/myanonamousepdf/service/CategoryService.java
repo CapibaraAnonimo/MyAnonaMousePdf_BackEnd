@@ -1,6 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.service;
 
-import com.capibaraanonimo.myanonamousepdf.dto.CategoryResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.category.CategoryResponse;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ListEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.SingleEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.model.Category;

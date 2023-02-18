@@ -55,4 +55,8 @@ public class Book {
     public void incrementDownloads() {
         amountDownloads += 1;
     }
+
+    @PreRemove //TODO comprobar que funciona sin el preremove y borrarlo
+    private void preRemove() {
+    }
 }

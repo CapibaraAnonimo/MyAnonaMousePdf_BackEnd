@@ -1,4 +1,4 @@
-package com.capibaraanonimo.myanonamousepdf.dto;
+package com.capibaraanonimo.myanonamousepdf.dto.book;
 
 import com.capibaraanonimo.myanonamousepdf.validation.single.annotations.CategoryExist;
 import com.capibaraanonimo.myanonamousepdf.validation.single.annotations.UserExist;
