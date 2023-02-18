@@ -1,6 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
-import com.capibaraanonimo.myanonamousepdf.model.Category;
+import com.capibaraanonimo.myanonamousepdf.dto.CategoryResponse;
 import com.capibaraanonimo.myanonamousepdf.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public List<Category> getAll() {
-        return categoryService.findAll();
+    public List<CategoryResponse> getAll() {
+        return categoryService.findAllWithBooks();
     }
 }
