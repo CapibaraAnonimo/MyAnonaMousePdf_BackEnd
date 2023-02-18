@@ -16,7 +16,7 @@ public class BookResponse {
 
     private LocalDateTime uploadDate;
 
-    private UUID uploader;
+    private UserResponse uploader;
 
     private long amountDownloads;
 
@@ -31,7 +31,7 @@ public class BookResponse {
         return BookResponse.builder()
                 .id(book.getId())
                 .uploadDate(book.getUploadDate())
-                .uploader(book.getUploader().getId())
+                .uploader(UserResponse.fromUser(book.getUploader()))
                 .amountDownloads(book.getAmountDownloads())
                 .category(book.getCategory().getName())
                 .vip(book.isVip())

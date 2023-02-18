@@ -17,6 +17,15 @@ import java.util.UUID;
 @Setter
 @Getter
 @Builder
+@NamedEntityGraphs(
+        @NamedEntityGraph(name = "category-with-books",
+                attributeNodes = {@NamedAttributeNode(value = "categorizedBooks",
+                        subgraph = "books-with-user")},
+                subgraphs = {@NamedSubgraph(name = "books-with-user",
+                        attributeNodes = {@NamedAttributeNode("uploader")
+                })
+        })
+)
 public class Category {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -39,5 +48,5 @@ public class Category {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @Builder.Default
-    private List<Book> categorizedBooks = new ArrayList<Book>();
+    private List<Book> categorizedBooks = new ArrayList<>();
 }
