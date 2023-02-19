@@ -23,8 +23,8 @@ import java.util.UUID;
                         subgraph = "books-with-user")},
                 subgraphs = {@NamedSubgraph(name = "books-with-user",
                         attributeNodes = {@NamedAttributeNode("uploader")
+                        })
                 })
-        })
 )
 public class Category {
     @Id

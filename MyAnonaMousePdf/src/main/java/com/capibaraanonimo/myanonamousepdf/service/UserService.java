@@ -1,7 +1,9 @@
 package com.capibaraanonimo.myanonamousepdf.service;
 
 import com.capibaraanonimo.myanonamousepdf.dto.user.CreateUserRequest;
+import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ListEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.SingleEntityNotFoundException;
+import com.capibaraanonimo.myanonamousepdf.model.Book;
 import com.capibaraanonimo.myanonamousepdf.model.Roles;
 import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.repository.UserRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,14 +48,14 @@ public class UserService {
     }
 
     public User findByUsername(String username) {
-        Optional<User> optionalUser =  userRepository.findFirstByUsername(username);
+        Optional<User> optionalUser = userRepository.findFirstByUsername(username);
         if (optionalUser.isPresent())
             return optionalUser.get();
-        throw new UsernameNotFoundException("No user with username: " +  username);
+        throw new UsernameNotFoundException("No user with username: " + username);
     }
 
     public User createUser(CreateUserRequest createUserRequest, EnumSet<Roles> roles) {
-        User user =  User.builder()
+        User user = User.builder()
                 .username(createUserRequest.getUsername())
                 .password(passwordEncoder.encode(createUserRequest.getPassword()))
                 .avatar(createUserRequest.getAvatar())
@@ -96,5 +99,16 @@ public class UserService {
         User user = findById(id);
         user.setEnabled(true);
         return user;
+    }
+
+    public List<Book> findBookmarks(UUID id) {
+        Optional<User> user = userRepository.findUserById(id);
+        if (user.isEmpty()) {
+            throw new SingleEntityNotFoundException(id, User.class);
+        }
+        List<Book> books = user.get().getBookmarks();
+        if (books.isEmpty())
+            throw new ListEntityNotFoundException(Book.class);
+        return books;
     }
 }

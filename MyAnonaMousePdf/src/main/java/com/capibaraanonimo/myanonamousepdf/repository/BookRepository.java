@@ -8,5 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
-    public Optional<Book> findBookByBook(String book);
+    Optional<Book> findBookByBook(String book);
 }

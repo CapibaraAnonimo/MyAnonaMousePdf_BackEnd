@@ -1,5 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
+import com.capibaraanonimo.myanonamousepdf.dto.book.BookResponse;
 import com.capibaraanonimo.myanonamousepdf.dto.user.*;
 import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.security.jwt.access.JwtProvider;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -132,5 +134,10 @@ public class UserController {
     @PutMapping("/admin/enable/{id}")
     public UserResponse enableAccount(@PathVariable String id) {
         return UserResponse.fromUser(userService.enable(UUID.fromString(id)));
+    }
+
+    @GetMapping("/bookmarks")
+    public List<BookResponse> getBookmarks(@AuthenticationPrincipal User loggedUser) {
+        return userService.findBookmarks(loggedUser.getId()).stream().map(BookResponse::of).toList();
     }
 }
