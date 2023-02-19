@@ -1,9 +1,6 @@
 package com.capibaraanonimo.myanonamousepdf.controller;
 
-import com.capibaraanonimo.myanonamousepdf.dto.user.CreateUserRequest;
-import com.capibaraanonimo.myanonamousepdf.dto.user.JwtUserResponse;
-import com.capibaraanonimo.myanonamousepdf.dto.user.LoginRequest;
-import com.capibaraanonimo.myanonamousepdf.dto.user.UserResponse;
+import com.capibaraanonimo.myanonamousepdf.dto.user.*;
 import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.security.jwt.access.JwtProvider;
 import com.capibaraanonimo.myanonamousepdf.security.jwt.refresh.RefreshToken;
@@ -17,12 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -94,5 +93,44 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(JwtUserResponse.of(user, token, refreshToken.getToken()));
+    }
+
+    @PutMapping("/user/changePassword")
+    public ResponseEntity<UserResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+                                                       @AuthenticationPrincipal User loggedUser) {
+        // Este código es mejorable.
+        // La validación de la contraseña nueva se puede hacer con un validador.
+        // La gestión de errores se puede hacer con excepciones propias
+        try {
+            if (userService.passwordMatch(loggedUser, changePasswordRequest.getOldPassword())) {
+                Optional<User> modified = userService.editPassword(loggedUser.getId(), changePasswordRequest.getNewPassword());
+                if (modified.isPresent())
+                    return ResponseEntity.ok(UserResponse.fromUser(modified.get()));
+            } else {
+                // Lo ideal es que esto se gestionara de forma centralizada
+                // Se puede ver cómo hacerlo en la formación sobre Validación con Spring Boot
+                // y la formación sobre Gestión de Errores con Spring Boot
+                throw new RuntimeException();
+            }
+        } catch (RuntimeException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Data Error");
+        }
+
+        return null;
+    }
+
+    @GetMapping("/me")
+    public UserResponse getMe(@AuthenticationPrincipal User loggedUser) {
+        return UserResponse.fromUser(loggedUser);
+    }
+
+    @PutMapping("/admin/disable/{id}")
+    public UserResponse disableAccount(@PathVariable String id) {
+        return UserResponse.fromUser(userService.disable(UUID.fromString(id)));
+    }
+
+    @PutMapping("/admin/enable/{id}")
+    public UserResponse enableAccount(@PathVariable String id) {
+        return UserResponse.fromUser(userService.enable(UUID.fromString(id)));
     }
 }
