@@ -70,4 +70,31 @@ public class UserService {
     public User createUserWithAdminRole(CreateUserRequest createUserRequest) {
         return createUser(createUserRequest, EnumSet.of(Roles.ADMIN));
     }
+
+    public boolean passwordMatch(User user, String clearPassword) {
+        return passwordEncoder.matches(clearPassword, user.getPassword());
+    }
+
+    public Optional<User> editPassword(UUID userId, String newPassword) {
+
+        // Aquí no se realizan comprobaciones de seguridad. Tan solo se modifica
+
+        return userRepository.findById(userId)
+                .map(u -> {
+                    u.setPassword(passwordEncoder.encode(newPassword));
+                    return userRepository.save(u);
+                }).or(() -> Optional.empty());
+    }
+
+    public User disable(UUID id) {
+        User user = findById(id);
+        user.setEnabled(false);
+        return user;
+    }
+
+    public User enable(UUID id) {
+        User user = findById(id);
+        user.setEnabled(true);
+        return user;
+    }
 }
