@@ -4,10 +4,12 @@ import com.capibaraanonimo.myanonamousepdf.dto.book.BookCreatedResponse;
 import com.capibaraanonimo.myanonamousepdf.dto.book.BookResponse;
 import com.capibaraanonimo.myanonamousepdf.dto.book.CreateBook;
 import com.capibaraanonimo.myanonamousepdf.dto.book.UpdateBook;
+import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteria;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteriaExtractor;
 import com.capibaraanonimo.myanonamousepdf.service.BookService;
 import com.capibaraanonimo.myanonamousepdf.service.StorageService;
+import com.capibaraanonimo.myanonamousepdf.service.UserService;
 import com.capibaraanonimo.myanonamousepdf.utils.MediaTypeUrlResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +32,7 @@ import java.util.UUID;
 @RequiredArgsConstructor()
 public class BookController {
     private final BookService bookService;
+    private final UserService userService;
     private final StorageService storageService;
 
     @GetMapping() //TODO personalizar la Page que no se que meterle
@@ -63,5 +67,13 @@ public class BookController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable String id) {
         bookService.deleteById(UUID.fromString(id));
+    }
+
+    @PutMapping("/bookmark/{id}") //TODO ¿como hago esto para no usar un response entity a palo?
+    public ResponseEntity bookmarkBook(@PathVariable String id, @AuthenticationPrincipal User loggedUser) {
+        boolean response = bookService.switchBookmark(loggedUser, UUID.fromString(id));
+        if (response)
+            return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

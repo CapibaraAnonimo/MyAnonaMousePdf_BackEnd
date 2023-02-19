@@ -7,7 +7,9 @@ import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ContentTypeNotValid
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.ListEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.errors.exceptions.SingleEntityNotFoundException;
 import com.capibaraanonimo.myanonamousepdf.model.Book;
+import com.capibaraanonimo.myanonamousepdf.model.User;
 import com.capibaraanonimo.myanonamousepdf.repository.BookRepository;
+import com.capibaraanonimo.myanonamousepdf.repository.UserRepository;
 import com.capibaraanonimo.myanonamousepdf.search.spec.BookSpecificationBuilder;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteria;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final CategoryService categoryService;
     private final StorageService storageService;
@@ -53,8 +57,26 @@ public class BookService {
                         .build());
     }
 
+    public String saveThumbnail(String file) throws IOException { //TODO ver si se puede hacer esto para el TFG
+        /*PDDocument document = PDDocument.load(new File(file));
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+        BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
+        // suffix in filename will be used as the file format
+        storageService.store(ImageIOUtil.writeImage(bim, file + "-" + "thumbnail" + ".jpeg", 300));
+        document.close();*/
+        return "";
+    }
+
     public void save(Book book) {
         bookRepository.save(book);
+    }
+
+    public Book findById(UUID id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        if (bookOptional.isEmpty())
+            throw new SingleEntityNotFoundException(id, Book.class);
+        return bookOptional.get();
     }
 
     public Page<Book> search(List<SearchCriteria> params, Pageable pageable) { //TODO poner el search para que busque sin importar las mayusculas
@@ -85,12 +107,31 @@ public class BookService {
         Optional<Book> bookOpt = bookRepository.findById(UUID.fromString(id));
         if (bookOpt.isEmpty())
             throw new SingleEntityNotFoundException(UUID.fromString(id), Book.class);
-        Book book =  bookOpt.get();
+        Book book = bookOpt.get();
         book.setCategory(categoryService.findById(UUID.fromString(updateBook.getCategory())));
         book.setVip(updateBook.isVip());
         book.setTitle(updateBook.getTitle());
         book.setAuthor(updateBook.getAuthor());
         book.setDescription(updateBook.getDescription());
         return bookRepository.save(book);
+    }
+
+    public boolean switchBookmark(User loggedUser, UUID id) {
+        Book book = findById(id);
+        Optional<User> user = userRepository.findUserById(loggedUser.getId());
+        if (user.isEmpty())
+            throw new SingleEntityNotFoundException(loggedUser.getId(), User.class);
+        List<Book> bookmarks = user.get().getBookmarks();
+        System.out.println(bookmarks.size());
+        if (bookmarks.contains(book)) {
+            bookmarks.remove(book);
+            userService.save(loggedUser);
+            return false;
+        } else {
+            bookmarks.add(book);
+            userService.save(loggedUser);
+            return true;
+        }
+
     }
 }

@@ -26,6 +26,15 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Builder
+@NamedEntityGraphs(
+        @NamedEntityGraph(name = "user-with-bookmarks",
+                attributeNodes = {@NamedAttributeNode(value = "bookmarks",
+                        subgraph = "book-with-category")},
+                subgraphs = {@NamedSubgraph(name = "book-with-category",
+                        attributeNodes = {@NamedAttributeNode("category")
+                        })
+                })
+)
 public class User implements UserDetails { //TODO añadir un soft delete con acceso a datos "eliminados" o usar el inabilitado
     @Id
     @GeneratedValue(generator = "UUID")
@@ -73,7 +82,7 @@ public class User implements UserDetails { //TODO añadir un soft delete con acc
     private List<Book> uploadedBooks;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Book> savedBooks;
+    private List<Book> bookmarks;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Roles> roles;
