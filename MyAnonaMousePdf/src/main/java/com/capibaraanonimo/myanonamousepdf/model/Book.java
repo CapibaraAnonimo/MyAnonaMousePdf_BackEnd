@@ -3,6 +3,8 @@ package com.capibaraanonimo.myanonamousepdf.model;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -33,8 +35,8 @@ public class Book {
     @Column(columnDefinition = "uuid", name = "book_id")
     private UUID id;
 
-    @Builder.Default()
-    private LocalDateTime uploadDate = LocalDateTime.now();
+    @CreatedDate
+    private LocalDateTime uploadDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_BOOK_USER"))
@@ -50,7 +52,10 @@ public class Book {
     @Builder.Default()
     private boolean vip = false;
 
-    private String book, title, author, description;
+    private String book, title, author;
+
+    @Length(max = 6000)
+    private String description;
 
     public void incrementDownloads() {
         amountDownloads += 1;
