@@ -37,7 +37,7 @@ public class BookController {
 
     @GetMapping() //TODO personalizar la Page que no se que meterle
     public Page<BookResponse> getAllBooks(@RequestParam(value = "search", defaultValue = "") String search,
-                                          @PageableDefault(size = 20, page = 0, sort = {"uploadDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                          @PageableDefault(size = 10, page = 0, sort = {"uploadDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         List<SearchCriteria> params = SearchCriteriaExtractor.extractSearchCriteriaList(search);
         return bookService.search(params, pageable).map(BookResponse::of);
     }
