@@ -8,4 +8,5 @@ Para la ejecución del proyecto se deberá ejecutar el archivo docker-compose.ym
 De igual manera se podrá ejecutar el proyecto sin usar docker, para ello se debe cambiar el archivo application.properties, dentro de ese archivo poner "spring.profiles.active" de "test" a "dev".
 ## Pruebas
 Para probar la api de manera completa se puede importar la colección de postman con los endpoints.
-Tambien se puede probar con la aplicación de Flutter que puedes encontrar en [MyAnonaMousePdf](https://github.com/CapibaraAnonimo/MyAnonaMousePdf_FrontEnd).
+
+Tambien se puede probar con la aplicación de Flutter que puedes encontrar en [MyAnonaMousePdf_FrontEnd](https://github.com/CapibaraAnonimo/MyAnonaMousePdf_FrontEnd).
