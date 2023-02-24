@@ -9,7 +9,6 @@ import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteria;
 import com.capibaraanonimo.myanonamousepdf.search.util.SearchCriteriaExtractor;
 import com.capibaraanonimo.myanonamousepdf.service.BookService;
 import com.capibaraanonimo.myanonamousepdf.service.StorageService;
-import com.capibaraanonimo.myanonamousepdf.service.UserService;
 import com.capibaraanonimo.myanonamousepdf.utils.MediaTypeUrlResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -32,7 +31,6 @@ import java.util.UUID;
 @RequiredArgsConstructor()
 public class BookController {
     private final BookService bookService;
-    private final UserService userService;
     private final StorageService storageService;
 
     @GetMapping() //TODO personalizar la Page que no se que meterle
@@ -40,6 +38,11 @@ public class BookController {
                                           @PageableDefault(size = 10, page = 0, sort = {"uploadDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         List<SearchCriteria> params = SearchCriteriaExtractor.extractSearchCriteriaList(search);
         return bookService.search(params, pageable).map(BookResponse::of);
+    }
+
+    @GetMapping("/{id}")
+    public BookResponse getBookById(@PathVariable String id) {
+        return BookResponse.of(bookService.findById(UUID.fromString(id)));
     }
 
     @GetMapping("/download/{filename:.+}")

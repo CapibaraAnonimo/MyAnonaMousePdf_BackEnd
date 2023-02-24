@@ -87,6 +87,7 @@ public class SecurityConfig {
                 //.antMatchers("/book/**").hasRole("USER")
                 .antMatchers("/auth/register/admin").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/book/download/**").hasAnyRole()
                 .anyRequest().authenticated();
 
 
