@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL) //TODO mirate esto para hacer la herencia de la clase que no te salía
 public class JwtUserResponse extends UserResponse {
 
     private String token;
