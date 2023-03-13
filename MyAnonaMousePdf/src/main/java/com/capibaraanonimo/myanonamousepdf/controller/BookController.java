@@ -55,19 +55,19 @@ public class BookController {
                 .body(resource);
     }
 
-    @PostMapping()
+    @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookCreatedResponse postBook(@RequestPart("file") MultipartFile file, @RequestPart("book") @Valid CreateBook book) {
-        return BookCreatedResponse.of(bookService.save(book, file));
+    public BookCreatedResponse postBook(@RequestPart("file") MultipartFile file, @RequestPart("book") @Valid CreateBook book, @AuthenticationPrincipal User loggedUser) {
+        return BookCreatedResponse.of(bookService.save(book, file, loggedUser));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/edit/{id}")
     public BookResponse putBook(@PathVariable String id, @RequestBody @Valid UpdateBook updateBook) {
         return BookResponse.of(bookService.edit(id, updateBook));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT) //FIXME hacer que se borre solo por el usuario que lo creo o un admin
     public void deleteBook(@PathVariable String id) {
         bookService.deleteById(UUID.fromString(id));
     }

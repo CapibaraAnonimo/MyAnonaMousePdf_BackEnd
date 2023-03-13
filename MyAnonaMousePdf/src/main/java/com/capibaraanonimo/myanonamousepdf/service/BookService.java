@@ -41,14 +41,15 @@ public class BookService {
         return books;
     }
 
-    public Book save(CreateBook book, MultipartFile file) { //FIXME no tengo claro ese posible null pointer
+    public Book save(CreateBook book, MultipartFile file, User user) { //FIXME no tengo claro ese posible null pointer
+        System.out.println(user);
         if (!(file.getContentType().equals("application/pdf") || file.getContentType().equals("application/epub+zip")))
             throw new ContentTypeNotValidException(file.getContentType());
         String filename = storageService.store(file);
 
         return bookRepository.save(
                 Book.builder()
-                        .uploader(userService.findById(book.getUploader()))
+                        .uploader(user)
                         .category(categoryService.findById(book.getCategory()))
                         .book(filename)
                         .title(book.getTitle())
